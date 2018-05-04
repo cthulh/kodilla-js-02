@@ -38,45 +38,78 @@
       }
       return compMove;
     }
+
+    // update results
+    function updateResults(results){
+
+      var resultBox = document.getElementById("result");
+      var currentResults = resultBox.innerHTML == ""? "0 - 0": resultBox.innerHTML;
+      var playerPoints = currentResults.charAt(0);
+      var computerPoints = currentResults.charAt(4);
+
+      if (results === "0 - 1"){
+        computerPoints++;
+      } else if (results === "1 - 0"){
+        playerPoints++;
+      }
+
+      writeTo(resultBox,playerPoints + " - " + computerPoints);
+    }
+
+    // update outcome
+    function updateOutcome(outcome){
+      writeTo(outputBox, outcome);
+    }
+
     // scenario = playerMove-computerMove
     var scenario = move + "-" + computerMove();
+    var result;
     // choose outcome from array of keys of player moves vs computer moves
     var outcomes = [
       {
         moves: "paper-paper",
-        outcome: "IT'S A DRAW: Both you and computer played Paper!"
+        outcome: "IT'S A DRAW: Both you and computer played Paper!",
+        result: "0 - 0"
       },
       {
         moves: "rock-rock",
-        outcome: "IT'S A DRAW: Both you and computer played ROCK!"
+        outcome: "IT'S A DRAW: Both you and computer played ROCK!",
+        result: "0 - 0"
       },
       {
         moves: "scissors-scissors",
-        outcome: "IT'S A DRAW: Both you and computer played SCISSORS!"
+        outcome: "IT'S A DRAW: Both you and computer played SCISSORS!",
+        result: "0 - 0"
       },
       {
         moves: "paper-rock",
-        outcome: "YOU WON: you played PAPER, and computer played ROCK"
+        outcome: "YOU WON: you played PAPER, and computer played ROCK",
+        result: "1 - 0"
       },
       {
         moves: "paper-scissors",
-        outcome: "YOU LOST: you played PAPER, and computer played SCISSORS"
+        outcome: "YOU LOST: you played PAPER, and computer played SCISSORS",
+        result: "0 - 1"
       },
       {
         moves: "rock-paper",
-        outcome: "YOU LOST: you played ROCK, and computer played PAPER"
+        outcome: "YOU LOST: you played ROCK, and computer played PAPER",
+        result: "0 - 1"
       },
       {
         moves: "rock-scissors",
-        outcome: "YOU WON: you played ROCK, and computer played SCISSORS"
+        outcome: "YOU WON: you played ROCK, and computer played SCISSORS",
+        result: "1 - 0"
       },
       {
         moves: "scissors-paper",
-        outcome: "YOU WON: you played SCISSORS, and computer played PAPER"
+        outcome: "YOU WON: you played SCISSORS, and computer played PAPER",
+        result: "1 - 0"
       },
       {
         moves: "scissors-rock",
-        outcome: "YOU LOST: you played SCISSORS, and computer played ROCK"
+        outcome: "YOU LOST: you played SCISSORS, and computer played ROCK",
+        result: "0 - 1"
       }
     ]
     // return outcome
@@ -86,11 +119,13 @@
       console.log(outcomes[i]);
       if (outcomes[i].moves === scenario) {
         outcome = outcomes[i].outcome;
+        result = outcomes[i].result;
       }
     }
     console.log(outcome);
     // write outcome in a div
-    writeTo(outputBox, outcome);
+    updateOutcome(outcome);
+    updateResults(result);
   }
 
 
