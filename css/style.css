@@ -19,11 +19,7 @@
     margin: auto;
     padding: 20px;
     border: 1px solid #888;
-    width: 80%;
-}
-
-.modal-content>div {
-  max-width: 300px;
+    max-width: 300px;
 }
 
 .modal-content>div>label, .modal-content>div>label{
