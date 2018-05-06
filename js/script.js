@@ -44,8 +44,8 @@
 
       var resultBox = document.getElementById("result");
       var currentResults = resultBox.innerHTML == ""? "0 - 0": resultBox.innerHTML;
-      var playerPoints = currentResults.charAt(0);
-      var computerPoints = currentResults.charAt(4);
+      var playerPoints = currentResults.split(" - ")[0];
+      var computerPoints = currentResults.split(" - ")[1];
 
       if (results === "0 - 1"){
         computerPoints++;
