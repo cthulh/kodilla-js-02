@@ -4,6 +4,8 @@
   var buttonPaper = document.getElementById("paper");
   var buttonScissors = document.getElementById("scissors");
   var outputBox = document.getElementById("output");
+  var resultBox = document.getElementById("result");
+  var roundsBox = document.getElementById("roundsToWin");
 
   buttonRock.addEventListener("click", function(){playerMove("rock")});
   buttonPaper.addEventListener("click", function(){playerMove("paper")});
@@ -19,6 +21,13 @@
     element.innerHTML = content;
   }
 
+  // blank out div
+  function blankOut(...elements){
+    for (let element of elements) {
+      writeTo(element, "");
+    }
+  }
+
   // check if is a number
   function isNumber(n) {
     return !isNaN(parseFloat(n)) && isFinite(n);
@@ -26,7 +35,7 @@
 
   // start a new game
   function resetGame(rounds){
-    var roundsBox = document.getElementById("roundsToWin");
+    blankOut(resultBox, outputBox, roundsBox);
     writeTo(roundsBox, ("Rounds to win: " + rounds));
   }
 
@@ -53,7 +62,6 @@
     // update results
     function updateResults(results){
 
-      var resultBox = document.getElementById("result");
       var currentResults = resultBox.innerHTML == ""? "0 - 0": resultBox.innerHTML;
       var playerPoints = currentResults.split(" - ")[0];
       var computerPoints = currentResults.split(" - ")[1];
