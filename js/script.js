@@ -16,6 +16,11 @@
     return Math.floor(Math.random() * Math.floor(max));
   }
 
+  // append element
+  function appendElement(element, content){
+    element.innerHTML += content;
+  }
+
   // write to an element
   function writeTo(element, content){
     element.innerHTML = content;
@@ -26,6 +31,11 @@
     for (let element of elements) {
       writeTo(element, "");
     }
+  }
+
+  // after game is finished, remind the player to reset it
+  function resetReminder(){
+    appendElement(outputBox, "<br><br>Game over, please press the new game button!")
   }
 
   // check if is a number
@@ -40,7 +50,16 @@
   }
 
   function playerMove(move){
-    // takes players move
+    var currentResults = resultBox.innerHTML == ""? "0 - 0": resultBox.innerHTML;
+    var playerPoints = currentResults.split(" - ")[0];
+    var computerPoints = currentResults.split(" - ")[1];
+    var roundsToWin = roundsBox.innerHTML.split(": ")[1];
+
+    if (requiredWinsMet()){
+      appendElement(outputBox, "<br>Game over, please press the new game button!");
+      return;
+    }
+
     // generates random number 1 - 3
     function computerMove(){
       var compMove;
@@ -61,15 +80,13 @@
 
     // update results
     function updateResults(results){
-
-      var currentResults = resultBox.innerHTML == ""? "0 - 0": resultBox.innerHTML;
-      var playerPoints = currentResults.split(" - ")[0];
-      var computerPoints = currentResults.split(" - ")[1];
-
+      // check who won, add a point
       if (results === "0 - 1"){
         computerPoints++;
+        if (computerPoints == roundsToWin) {appendElement(outputBox, "<br> YOU LOST THE ENTIRE GAME!!! <br> COMPUTER IS VICTORIOUS!");}
       } else if (results === "1 - 0"){
         playerPoints++;
+        if (playerPoints == roundsToWin) {appendElement(outputBox, "<br> YOU WON THE ENTIRE GAME!!!");}
       }
 
       writeTo(resultBox,playerPoints + " - " + computerPoints);
@@ -78,6 +95,11 @@
     // update outcome
     function updateOutcome(outcome){
       writeTo(outputBox, outcome);
+    }
+
+    // check if required number of wins has been reached
+    function requiredWinsMet(){
+      return computerPoints == roundsToWin || playerPoints == roundsToWin;
     }
 
     // scenario = playerMove-computerMove
@@ -167,7 +189,7 @@
   // When the user clicks on submit button hide modal
   submitBtn.onclick = function() {
     var rounds = document.getElementById("rounds");
-    if (isNumber(rounds.value)) {
+    if (isNumber(rounds.value) && rounds.value > 0) {
       resetGame(rounds.value);
       modal.style.display = "none";
       rounds.value = "";
