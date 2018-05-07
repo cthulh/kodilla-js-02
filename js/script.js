@@ -7,6 +7,10 @@
   var resultBox = document.getElementById("result");
   var roundsBox = document.getElementById("roundsToWin");
 
+  var playerScore = 0;
+  var computerScore = 0;
+  var winsRequired = 0;
+
   buttonRock.addEventListener("click", function(){playerMove("rock")});
   buttonPaper.addEventListener("click", function(){playerMove("paper")});
   buttonScissors.addEventListener("click", function(){playerMove("scissors")});
@@ -38,6 +42,13 @@
     appendElement(outputBox, "<br><br>Game over, please press the new game button!")
   }
 
+  // reset all var's associated with the game
+  function resetScores(){
+    playerScore = 0;
+    computerScore = 0;
+    winsRequired = 0;
+  }
+
   // check if is a number
   function isNumber(n) {
     return !isNaN(parseFloat(n)) && isFinite(n);
@@ -46,14 +57,13 @@
   // start a new game
   function resetGame(rounds){
     blankOut(resultBox, outputBox, roundsBox);
+    resetScores();
     writeTo(roundsBox, ("Rounds to win: " + rounds));
+    // set rounds required to win the game
+    winsRequired = rounds;
   }
 
   function playerMove(move){
-    var currentResults = resultBox.innerHTML == ""? "0 - 0": resultBox.innerHTML;
-    var playerPoints = currentResults.split(" - ")[0];
-    var computerPoints = currentResults.split(" - ")[1];
-    var roundsToWin = roundsBox.innerHTML.split(": ")[1];
 
     if (requiredWinsMet()){
       appendElement(outputBox, "<br>Game over, please press the new game button!");
@@ -82,14 +92,14 @@
     function updateResults(results){
       // check who won, add a point
       if (results === "0 - 1"){
-        computerPoints++;
-        if (computerPoints == roundsToWin) {appendElement(outputBox, "<br> YOU LOST THE ENTIRE GAME!!! <br> COMPUTER IS VICTORIOUS!");}
+        computerScore++;
+        if (computerScore == winsRequired) {appendElement(outputBox, "<br> YOU LOST THE ENTIRE GAME!!! <br> COMPUTER IS VICTORIOUS!");}
       } else if (results === "1 - 0"){
-        playerPoints++;
-        if (playerPoints == roundsToWin) {appendElement(outputBox, "<br> YOU WON THE ENTIRE GAME!!!");}
+        playerScore++;
+        if (playerScore == winsRequired) {appendElement(outputBox, "<br> YOU WON THE ENTIRE GAME!!!");}
       }
 
-      writeTo(resultBox,playerPoints + " - " + computerPoints);
+      writeTo(resultBox, playerScore + " - " + computerScore);
     }
 
     // update outcome
@@ -99,7 +109,7 @@
 
     // check if required number of wins has been reached
     function requiredWinsMet(){
-      return computerPoints == roundsToWin || playerPoints == roundsToWin;
+      return computerScore == winsRequired || playerScore == winsRequired;
     }
 
     // scenario = playerMove-computerMove
