@@ -1,19 +1,19 @@
 (function(){
 
-  var buttonRock = document.getElementById("rock");
-  var buttonPaper = document.getElementById("paper");
-  var buttonScissors = document.getElementById("scissors");
   var outputBox = document.getElementById("output");
   var resultBox = document.getElementById("result");
   var roundsBox = document.getElementById("roundsToWin");
 
-  var playerScore = 0;
-  var computerScore = 0;
-  var winsRequired = 0;
+  var params = {
+    playerScore: 0,
+    computerScore: 0,
+    winsRequired: 0
+  }
 
-  buttonRock.addEventListener("click", function(){playerMove("rock")});
-  buttonPaper.addEventListener("click", function(){playerMove("paper")});
-  buttonScissors.addEventListener("click", function(){playerMove("scissors")});
+  // assign function playerMove to buttons
+  var buttons = document.querySelectorAll(".player-move");
+  console.log(buttons);
+  buttons.forEach(btn => btn.addEventListener("click", function(){playerMove(this.dataset.move)}));
 
   // gat a random integer between 0 and max
   function getRandomInt(max) {
@@ -44,9 +44,9 @@
 
   // reset all var's associated with the game
   function resetScores(){
-    playerScore = 0;
-    computerScore = 0;
-    winsRequired = 0;
+    params.playerScore = 0;
+    params.computerScore = 0;
+    params.winsRequired = 0;
   }
 
   // check if is a number
@@ -60,7 +60,7 @@
     resetScores();
     writeTo(roundsBox, ("Rounds to win: " + rounds));
     // set rounds required to win the game
-    winsRequired = rounds;
+    params.winsRequired = rounds;
   }
 
   function playerMove(move){
@@ -92,14 +92,14 @@
     function updateResults(results){
       // check who won, add a point
       if (results === "0 - 1"){
-        computerScore++;
-        if (computerScore == winsRequired) {appendElement(outputBox, "<br> YOU LOST THE ENTIRE GAME!!! <br> COMPUTER IS VICTORIOUS!");}
+        params.computerScore++;
+        if (params.computerScore == params.winsRequired) {appendElement(outputBox, "<br> YOU LOST THE ENTIRE GAME!!! <br> COMPUTER IS VICTORIOUS!");}
       } else if (results === "1 - 0"){
-        playerScore++;
-        if (playerScore == winsRequired) {appendElement(outputBox, "<br> YOU WON THE ENTIRE GAME!!!");}
+        params.playerScore++;
+        if (params.playerScore == params.winsRequired) {appendElement(outputBox, "<br> YOU WON THE ENTIRE GAME!!!");}
       }
 
-      writeTo(resultBox, playerScore + " - " + computerScore);
+      writeTo(resultBox, params.playerScore + " - " + params.computerScore);
     }
 
     // update outcome
@@ -109,7 +109,7 @@
 
     // check if required number of wins has been reached
     function requiredWinsMet(){
-      return computerScore == winsRequired || playerScore == winsRequired;
+      return params.computerScore == params.winsRequired || params.playerScore == params.winsRequired;
     }
 
     // scenario = playerMove-computerMove
