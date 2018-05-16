@@ -180,7 +180,7 @@
   }
 
   // Get the modal
-  var modal = document.getElementById('newGameModal');
+  var newGameModal = document.getElementById('newGameModal');
 
   // Get the button that opens the modal
   var newGameBtn = document.getElementById("new_game");
@@ -189,11 +189,11 @@
   var submitBtn = document.getElementsByClassName("submit")[0];
 
   // Get the modal message p
-  var modalMessage = document.getElementById("modalMessage");
+  var newGameModalMessage = document.getElementById("newGameModalMessage");
 
   // When the user clicks the button, open the modal
   newGameBtn.onclick = function() {
-    modal.style.display = "block";
+    newGameModal.style.display = "block";
   }
 
   // When the user clicks on submit button hide modal
@@ -201,18 +201,18 @@
     var rounds = document.getElementById("rounds");
     if (isNumber(rounds.value) && rounds.value > 0) {
       resetGame(rounds.value);
-      modal.style.display = "none";
+      newGameModal.style.display = "none";
       rounds.value = "";
     } else {
-      modalMessage.innerHTML = "Please enter a numeric value!";
+      newGameModalMessage.innerHTML = "Please enter a numeric value!";
       rounds.value = "";
     }
   }
 
   // When the user clicks anywhere outside of the modal, close it
   window.onclick = function(event) {
-    if (event.target == modal) {
-      modal.style.display = "none";
+    if (event.target == newGameModal) {
+      newGameModal.style.display = "none";
     }
   }
 
