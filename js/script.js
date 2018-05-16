@@ -104,7 +104,8 @@
 
     // update outcome
     function updateOutcome(outcome){
-      writeTo(outputBox, outcome);
+      writeTo(document.getElementById("roundResultModalMessage"),outcome);
+      roundResultsModal.style.display = "block";
     }
 
     // check if required number of wins has been reached
@@ -179,14 +180,18 @@
     updateResults(result);
   }
 
-  // Get the modal
-  var newGameModal = document.getElementById('newGameModal');
+  // Get the modals
+  var newGameModal = document.getElementById("newGameModal");
+  var roundResultsModal = document.getElementById("roundResultModal");
 
-  // Get the button that opens the modal
+  // Get the button that opens the new game modal
   var newGameBtn = document.getElementById("new_game");
 
-  // Get the <span> element that closes the modal
+  // Get the <span> element that closes the new game modal
   var submitBtn = document.getElementsByClassName("submit")[0];
+
+  // Get the button that closes the round results modal
+  var closeBtn = document.getElementsByClassName("roundResultClose")[0];
 
   // Get the modal message p
   var newGameModalMessage = document.getElementById("newGameModalMessage");
@@ -194,6 +199,11 @@
   // When the user clicks the button, open the modal
   newGameBtn.onclick = function() {
     newGameModal.style.display = "block";
+  }
+
+  // Close buttons closes round results modal
+  closeBtn.onclick = function() {
+    roundResultsModal.style.display = "none";
   }
 
   // When the user clicks on submit button hide modal
@@ -211,8 +221,9 @@
 
   // When the user clicks anywhere outside of the modal, close it
   window.onclick = function(event) {
-    if (event.target == newGameModal) {
+    if (event.target == newGameModal || event.target == roundResultsModal) {
       newGameModal.style.display = "none";
+      roundResultsModal.style.display = "none";
     }
   }
 
