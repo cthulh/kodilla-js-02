@@ -7,7 +7,8 @@
   var params = {
     playerScore: 0,
     computerScore: 0,
-    winsRequired: 0
+    winsRequired: 0,
+    progress: []
   }
 
   // assign function playerMove to buttons
@@ -88,19 +89,35 @@
       return compMove;
     }
 
-    // update results
-    function updateResults(results){
-      // check who won, add a point
-      if (results === "0 - 1"){
-        params.computerScore++;
-        if (params.computerScore == params.winsRequired) {appendElement(outputBox, "<br> YOU LOST THE ENTIRE GAME!!! <br> COMPUTER IS VICTORIOUS!");}
-      } else if (results === "1 - 0"){
-        params.playerScore++;
-        if (params.playerScore == params.winsRequired) {appendElement(outputBox, "<br> YOU WON THE ENTIRE GAME!!!");}
+    // update game progress
+    function updateProgress(move, outcome, result){
+      // update results
+      function updateResults(result){
+        // check who won, add a point
+        if (result === "0 - 1"){
+          params.computerScore++;
+          if (params.computerScore == params.winsRequired) {appendElement(outputBox, "<br> YOU LOST THE ENTIRE GAME!!! <br> COMPUTER IS VICTORIOUS!");}
+        } else if (result === "1 - 0"){
+          params.playerScore++;
+          if (params.playerScore == params.winsRequired) {appendElement(outputBox, "<br> YOU WON THE ENTIRE GAME!!!");}
+        }
+        // return updated results
+        return (params.playerScore + " - " + params.computerScore);
       }
 
-      writeTo(resultBox, params.playerScore + " - " + params.computerScore);
+      params.progress.push({
+        roundOutcome: outcome,
+        playerMove: move.split("-")[0],
+        computerMove: move.split("-")[1],
+        result: updateResults(result),
+        roundNum: params.computerScore + params.playerScore
+      });
+      console.log(params.progress);
+
+
+
     }
+
 
     // update outcome
     function updateOutcome(outcome){
@@ -115,7 +132,7 @@
 
     // scenario = playerMove-computerMove
     var scenario = move + "-" + computerMove();
-    var result;
+
     // choose outcome from array of keys of player moves vs computer moves
     var outcomes = [
       {
@@ -165,19 +182,22 @@
       }
     ]
     // return outcome
+    var moves;
     var outcome;
+    var result;
     console.log(scenario);
     for(var i = 0; i < outcomes.length; i++){
       console.log(outcomes[i]);
       if (outcomes[i].moves === scenario) {
         outcome = outcomes[i].outcome;
         result = outcomes[i].result;
+        moves = outcomes[i].move;
       }
     }
     console.log(outcome);
-    // write outcome in a div
+
     updateOutcome(outcome);
-    updateResults(result);
+    updateProgress(moves,outcome,result);
   }
 
   // Get the modals
