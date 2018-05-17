@@ -10,6 +10,7 @@
     playerScore: 0,
     computerScore: 0,
     winsRequired: 0,
+    playerName: "",
     progress: []
   }
 
@@ -60,13 +61,14 @@
   }
 
   // start a new game
-  function resetGame(rounds){
+  function resetGame(rounds, playerName){
     blankOut(resultBox, outputBox, roundsBox);
     resetScores();
     resetResultsTable();
     writeTo(roundsBox, ("Rounds to win: " + rounds));
     // set rounds required to win the game
     params.winsRequired = rounds;
+    params.playerName = playerName;
   }
 
   // reset results table
@@ -117,10 +119,10 @@
         // check who won, add a point
         if (result === "0 - 1"){
           params.computerScore++;
-          if (params.computerScore == params.winsRequired) {appendElement(roundResultModalMessage, "<br><br> YOU LOST THE ENTIRE GAME!!! <br> COMPUTER IS VICTORIOUS!");}
+          if (params.computerScore == params.winsRequired) {appendElement(roundResultModalMessage, "<br><br> " + params.playerName + " LOST THE ENTIRE GAME!!! <br> COMPUTER IS VICTORIOUS!");}
         } else if (result === "1 - 0"){
           params.playerScore++;
-          if (params.playerScore == params.winsRequired) {appendElement(roundResultModalMessage, "<br><br> YOU WON THE ENTIRE GAME!!!");}
+          if (params.playerScore == params.winsRequired) {appendElement(roundResultModalMessage, "<br><br> " + params.playerName + " WON THE ENTIRE GAME!!!");}
         }
         // return updated results
         return (params.playerScore + " - " + params.computerScore);
@@ -165,47 +167,47 @@
     var outcomes = [
       {
         moves: "paper-paper",
-        outcome: "IT'S A DRAW: Both you and computer played Paper!",
+        outcome: "IT'S A DRAW: Both " + params.playerName + " and computer played Paper!",
         result: "0 - 0"
       },
       {
         moves: "rock-rock",
-        outcome: "IT'S A DRAW: Both you and computer played ROCK!",
+        outcome: "IT'S A DRAW: Both " + params.playerName + " and computer played ROCK!",
         result: "0 - 0"
       },
       {
         moves: "scissors-scissors",
-        outcome: "IT'S A DRAW: Both you and computer played SCISSORS!",
+        outcome: "IT'S A DRAW: Both " + params.playerName + " and computer played SCISSORS!",
         result: "0 - 0"
       },
       {
         moves: "paper-rock",
-        outcome: "YOU WON: you played PAPER, and computer played ROCK",
+        outcome: params.playerName + " WON: " + params.playerName + " played PAPER, and computer played ROCK",
         result: "1 - 0"
       },
       {
         moves: "paper-scissors",
-        outcome: "YOU LOST: you played PAPER, and computer played SCISSORS",
+        outcome: params.playerName + " LOST: " + params.playerName + " played PAPER, and computer played SCISSORS",
         result: "0 - 1"
       },
       {
         moves: "rock-paper",
-        outcome: "YOU LOST: you played ROCK, and computer played PAPER",
+        outcome: params.playerName + " LOST: " + params.playerName + " played ROCK, and computer played PAPER",
         result: "0 - 1"
       },
       {
         moves: "rock-scissors",
-        outcome: "YOU WON: you played ROCK, and computer played SCISSORS",
+        outcome: params.playerName + " WON: " + params.playerName + " played ROCK, and computer played SCISSORS",
         result: "1 - 0"
       },
       {
         moves: "scissors-paper",
-        outcome: "YOU WON: you played SCISSORS, and computer played PAPER",
+        outcome: params.playerName + " WON: " + params.playerName + " played SCISSORS, and computer played PAPER",
         result: "1 - 0"
       },
       {
         moves: "scissors-rock",
-        outcome: "YOU LOST: you played SCISSORS, and computer played ROCK",
+        outcome: params.playerName + " LOST: " + params.playerName + " played SCISSORS, and computer played ROCK",
         result: "0 - 1"
       }
     ]
@@ -222,7 +224,6 @@
         moves = outcomes[i].moves;
       }
     }
-    console.log(outcome);
 
     updateOutcome(outcome);
     updateProgress(moves,outcome,result);
@@ -259,13 +260,18 @@
   // When the user clicks on submit button hide modal
   submitBtn.onclick = function() {
     var rounds = document.getElementById("rounds");
-    if (isNumber(rounds.value) && rounds.value > 0) {
-      resetGame(rounds.value);
+    var playerName = document.getElementById("playerName");
+    if (isNumber(rounds.value) && rounds.value > 0 && playerName.value) {
+      resetGame(rounds.value, playerName.value);
       newGameModal.style.display = "none";
       rounds.value = "";
-    } else {
-      newGameModalMessage.innerHTML = "Please enter a numeric value!";
+      playerName.value = "";
+    } else if (playerName.value) {
+      newGameModalMessage.innerHTML = "Please enter a numeric value of rounds!";
       rounds.value = "";
+    } else if (isNumber(rounds.value) && rounds.value > 0) {
+      newGameModalMessage.innerHTML = "Please enter a player name";
+      playerName.value = "";
     }
   }
 
