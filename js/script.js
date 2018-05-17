@@ -3,6 +3,7 @@
   var outputBox = document.getElementById("output");
   var resultBox = document.getElementById("result");
   var roundsBox = document.getElementById("roundsToWin");
+  var resultsTable = document.getElementById("resultsTable");
 
   var params = {
     currentRound: 0,
@@ -62,9 +63,25 @@
   function resetGame(rounds){
     blankOut(resultBox, outputBox, roundsBox);
     resetScores();
+    resetResultsTable();
     writeTo(roundsBox, ("Rounds to win: " + rounds));
     // set rounds required to win the game
     params.winsRequired = rounds;
+  }
+
+  // reset results table
+  function resetResultsTable(){
+    resultsTable.innerHTML = "";
+    var tableHeader = document.createElement("tr");
+    var headers = [
+      "Round number",
+      "Player Move",
+      "Computer move",
+      "Result",
+      "Round outcome"
+    ];
+    headers.forEach(header => tableHeader.innerHTML += "<th>" + header + "</th>");
+    resultsTable.appendChild(tableHeader);
   }
 
   function playerMove(move){
@@ -110,20 +127,30 @@
       }
 
       params.progress.push({
-        roundOutcome: outcome,
+        roundNum: params.currentRound,
         playerMove: move.split("-")[0],
         computerMove: move.split("-")[1],
         result: updateResults(result),
-        roundNum: params.currentRound
+        roundOutcome: outcome
       });
       console.log(params.progress);
     }
-
 
     // update outcome
     function updateOutcome(outcome){
       writeTo(roundResultModalMessage,outcome);
       roundResultsModal.style.display = "block";
+    }
+
+    // update results table
+    function updateResultsTable(){
+      var mostRecentResult = params.progress[params.progress.length - 1];
+      var resultElement = document.createElement("tr");
+      for (var key in mostRecentResult) {
+        console.log(mostRecentResult[key]);
+        resultElement.innerHTML += "<td>" + mostRecentResult[key] + "</td>"
+      }
+      resultsTable.appendChild(resultElement);
     }
 
     // check if required number of wins has been reached
@@ -199,6 +226,7 @@
 
     updateOutcome(outcome);
     updateProgress(moves,outcome,result);
+    updateResultsTable();
   }
 
   // Get the modals
