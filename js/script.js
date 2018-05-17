@@ -5,6 +5,7 @@
   var roundsBox = document.getElementById("roundsToWin");
 
   var params = {
+    currentRound: 0,
     playerScore: 0,
     computerScore: 0,
     winsRequired: 0,
@@ -45,9 +46,11 @@
 
   // reset all var's associated with the game
   function resetScores(){
+    params.currentRound = 0;
     params.playerScore = 0;
     params.computerScore = 0;
     params.winsRequired = 0;
+    params.progress = []
   }
 
   // check if is a number
@@ -65,6 +68,7 @@
   }
 
   function playerMove(move){
+    params.currentRound ++
 
     if (requiredWinsMet()){
       appendElement(outputBox, "<br>Game over, please press the new game button!");
@@ -96,10 +100,10 @@
         // check who won, add a point
         if (result === "0 - 1"){
           params.computerScore++;
-          if (params.computerScore == params.winsRequired) {appendElement(outputBox, "<br> YOU LOST THE ENTIRE GAME!!! <br> COMPUTER IS VICTORIOUS!");}
+          if (params.computerScore == params.winsRequired) {appendElement(roundResultModalMessage, "<br><br> YOU LOST THE ENTIRE GAME!!! <br> COMPUTER IS VICTORIOUS!");}
         } else if (result === "1 - 0"){
           params.playerScore++;
-          if (params.playerScore == params.winsRequired) {appendElement(outputBox, "<br> YOU WON THE ENTIRE GAME!!!");}
+          if (params.playerScore == params.winsRequired) {appendElement(roundResultModalMessage, "<br><br> YOU WON THE ENTIRE GAME!!!");}
         }
         // return updated results
         return (params.playerScore + " - " + params.computerScore);
@@ -110,18 +114,15 @@
         playerMove: move.split("-")[0],
         computerMove: move.split("-")[1],
         result: updateResults(result),
-        roundNum: params.computerScore + params.playerScore
+        roundNum: params.currentRound
       });
       console.log(params.progress);
-
-
-
     }
 
 
     // update outcome
     function updateOutcome(outcome){
-      writeTo(document.getElementById("roundResultModalMessage"),outcome);
+      writeTo(roundResultModalMessage,outcome);
       roundResultsModal.style.display = "block";
     }
 
@@ -185,13 +186,13 @@
     var moves;
     var outcome;
     var result;
-    console.log(scenario);
+
     for(var i = 0; i < outcomes.length; i++){
-      console.log(outcomes[i]);
+
       if (outcomes[i].moves === scenario) {
         outcome = outcomes[i].outcome;
         result = outcomes[i].result;
-        moves = outcomes[i].move;
+        moves = outcomes[i].moves;
       }
     }
     console.log(outcome);
@@ -215,6 +216,7 @@
 
   // Get the modal message p
   var newGameModalMessage = document.getElementById("newGameModalMessage");
+  var roundResultModalMessage = document.getElementById("roundResultModalMessage");
 
   // When the user clicks the button, open the modal
   newGameBtn.onclick = function() {
