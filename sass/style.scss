@@ -22,7 +22,32 @@
     max-width: 300px;
 }
 
-.modal-content>div>label, .modal-content>div>label{
-  display: block;
-  margin-right: 20px;
+.modal-content>div>label {
+  div {
+    label {
+      display: block;
+      margin-right: 20px;
+    }
+  }
+}
+
+#roundResultModal {
+  .modal-content {
+    max-width: 60%;
+  }
+  table {
+    margin: 20px auto;
+    border: 1px solid grey;
+    td, th {
+      padding: 5px;
+      border: 1px solid grey;
+    }
+    th {
+      font-weight: 400;
+    }
+    tr, td {
+      text-align: center;
+      font-weight: 200;
+    }
+  }
 }
